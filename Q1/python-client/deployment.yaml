@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-client-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-client-label
+  template:
+    metadata:
+      labels:
+        app: python-client-label
+    spec:
+      containers:
+      - name: python-server-container
+        image: mntalha/python-client:latest
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+           name: client-config
+        volumeMounts:
+          - name: config
+            mountPath: /etc/configs/config.file
+      volumes:
+        - name: config
+          configMap:
+            name: client-config
+
+	

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-server-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-server-label
+  template:
+    metadata:
+      labels:
+        app: python-server-label
+    spec:
+      containers:
+      - name: python-server-container
+        image: mntalha/python-server:latest
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+           name: server-config
+        volumeMounts:
+          - name: config
+            mountPath: /etc/configs/config.file
+      volumes:
+        - name: config
+          configMap:
+            name: server-config
+
+	
